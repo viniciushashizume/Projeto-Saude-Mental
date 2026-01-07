@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,6 +13,7 @@ class MindGardenApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mind Garden',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.green, useMaterial3: true),
       home: const HomePage(),
     );
@@ -28,20 +28,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Estado da Gamificação
   int _pontos = 0;
-  String _estadoPlanta =
-      "assets/planta_pequena.png"; // Você precisaria adicionar imagens
+  String _estadoPlanta = "assets/planta_pequena.png"; // Placeholder
 
-  // Controladores do Formulário
+  // Controladores
   final TextEditingController _diarioController = TextEditingController();
+  final TextEditingController _userController =
+      TextEditingController(); // <--- NOVO
+
   double _sonoNivel = 3.0;
   bool _humorOscilacao = false;
   String _feedbackBackend = "";
 
-  // Função para enviar dados ao Python
   Future<void> enviarDados() async {
-    // 10.0.2.2 é o endereço do localhost do PC dentro do emulador Android
+    // Validação simples: Usuário precisa ter nome
+    if (_userController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Por favor, digite seu nome de usuário!")),
+      );
+      return;
+    }
+
     var url = Uri.parse('http://127.0.0.1:8000/analisar');
 
     try {
@@ -49,6 +56,7 @@ class _HomePageState extends State<HomePage> {
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
+          "user_id": _userController.text, // <--- ENVIANDO O NOME
           "texto": _diarioController.text,
           "sono_nivel": _sonoNivel.toInt(),
           "humor_oscilacao": _humorOscilacao,
@@ -61,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           _pontos += (dados['pontos_gamificacao'] as int);
           _feedbackBackend = dados['resultado'];
           _diarioController.clear();
-          // Lógica simples de gamificação visual
+
           if (_pontos > 20)
             _estadoPlanta = "Planta Cresceu! 🌻";
           else
@@ -89,7 +97,18 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // --- Área de Gamificação ---
+            // --- Área de Identificação (NOVO) ---
+            TextField(
+              controller: _userController,
+              decoration: const InputDecoration(
+                labelText: "Quem é você?",
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // --- Gamificação ---
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -98,15 +117,17 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Column(
                 children: [
-                  Text(_estadoPlanta, style: const TextStyle(fontSize: 40)),
+                  Text(
+                    _estadoPlanta,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ), // Simplifiquei para texto por enquanto
                   const SizedBox(height: 10),
                   Text(
                     "Pontos de Vida: $_pontos",
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    "Registre seu dia para regar a planta!",
-                    style: TextStyle(fontSize: 12),
                   ),
                 ],
               ),
@@ -114,7 +135,7 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 30),
 
-            // --- Monitoramento (Baseado no Dataset) ---
+            // --- Monitoramento ---
             const Text(
               "Como foi seu sono?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -125,37 +146,28 @@ class _HomePageState extends State<HomePage> {
               max: 5,
               divisions: 4,
               label: _sonoNivel.round().toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _sonoNivel = value;
-                });
-              },
+              onChanged: (v) => setState(() => _sonoNivel = v),
             ),
 
             SwitchListTile(
-              title: const Text("Teve oscilação de humor repentina?"),
+              title: const Text("Oscilação de humor repentina?"),
               value: _humorOscilacao,
-              onChanged: (bool value) {
-                setState(() {
-                  _humorOscilacao = value;
-                });
-              },
+              onChanged: (v) => setState(() => _humorOscilacao = v),
             ),
 
             const SizedBox(height: 20),
 
-            // --- Diário (NLP) ---
+            // --- Diário ---
             const Text(
-              "Diário de Emoções",
+              "Diário",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextField(
               controller: _diarioController,
-              maxLines: 5,
+              maxLines: 4,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText:
-                    'Escreva como você se sente hoje... (tente usar palavras em inglês para testar o modelo: anxious, happy, etc)',
+                hintText: 'Escreva seus sentimentos...',
               ),
             ),
 
@@ -163,8 +175,8 @@ class _HomePageState extends State<HomePage> {
 
             ElevatedButton.icon(
               onPressed: enviarDados,
-              icon: const Icon(Icons.water_drop),
-              label: const Text("Registrar e Regar Planta"),
+              icon: const Icon(Icons.save),
+              label: const Text("Salvar Diário"),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Colors.green,
@@ -175,38 +187,14 @@ class _HomePageState extends State<HomePage> {
             if (_feedbackBackend.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: AlertCard(status: _feedbackBackend),
+                child: Card(
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Resultado ML: $_feedbackBackend"),
+                  ),
+                ),
               ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// Widget personalizado para exibir o alerta
-class AlertCard extends StatelessWidget {
-  final String status;
-  const AlertCard({super.key, required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Colors.blue;
-    if (status.contains("Risco")) color = Colors.red;
-    if (status.contains("Atenção")) color = Colors.orange;
-
-    return Card(
-      color: color.withOpacity(0.2),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(Icons.info, color: color),
-            const SizedBox(width: 10),
-            Text(
-              "Análise ML: $status",
-              style: TextStyle(color: color, fontWeight: FontWeight.bold),
-            ),
           ],
         ),
       ),

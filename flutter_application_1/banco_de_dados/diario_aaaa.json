@@ -1,0 +1,16 @@
+[
+    {
+        "data": "2026-01-07 14:38:07",
+        "texto": "aaaa",
+        "sono": 3,
+        "resultado_ml": "Normal",
+        "risk_score": 0
+    },
+    {
+        "data": "2026-01-07 14:38:17",
+        "texto": "",
+        "sono": 3,
+        "resultado_ml": "Normal",
+        "risk_score": 0
+    }
+]

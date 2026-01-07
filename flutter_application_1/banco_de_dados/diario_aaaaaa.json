@@ -1,0 +1,100 @@
+[
+    {
+        "data": "2026-01-07 14:38:50",
+        "texto": "",
+        "sono": 3,
+        "resultado_ml": "Normal",
+        "risk_score": 0
+    },
+    {
+        "data": "2026-01-07 14:48:32",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:35",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:36",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:37",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:38",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:39",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:41",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:42",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:43",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:44",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:48:45",
+        "texto": "",
+        "sono": 3,
+        "resultado_ml": "Normal",
+        "risk_score": 0
+    },
+    {
+        "data": "2026-01-07 14:48:47",
+        "texto": "kill",
+        "sono": 3,
+        "resultado_ml": "Atenção: Sinais de Estresse",
+        "risk_score": 2
+    },
+    {
+        "data": "2026-01-07 14:57:41",
+        "texto": "kill",
+        "sono": 1,
+        "resultado_ml": "Alerta: Risco Elevado",
+        "risk_score": 4
+    }
+]
