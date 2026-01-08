@@ -18,7 +18,7 @@ app.add_middleware(
 
 # --- Modelo de Dados Atualizado ---
 class DiarioItem(BaseModel):
-    user_id: str  # <--- NOVO CAMPO: Identificação do usuário
+    user_id: str  
     texto: str
     sono_nivel: int
     humor_oscilacao: bool
